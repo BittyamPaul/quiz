@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Question - Quiz Master Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <style>
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #343a40;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.75);
+            padding: 0.75rem 1rem;
+            border-radius: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+        .sidebar .nav-link:hover {
+            color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .sidebar .nav-link i {
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">
+                <i class="bi bi-mortarboard-fill me-2"></i>Quiz Master Admin
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>{{ current_user.full_name }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin_subjects') }}">
+                                <i class="bi bi-journal-bookmark"></i> Subjects
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin_chapters') }}">
+                                <i class="bi bi-journals"></i> Chapters
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('admin_quizzes') }}">
+                                <i class="bi bi-question-circle"></i> Quizzes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin_users') }}">
+                                <i class="bi bi-people"></i> Users
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Edit Question</h1>
+                    <a href="{{ url_for('quiz_questions', quiz_id=question.quiz_id) }}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Back to Questions
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="mb-3">
+                                <label for="question_statement" class="form-label">Question</label>
+                                <textarea class="form-control" id="question_statement" name="question_statement" rows="3" required>{{ question.question_statement }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="option1" class="form-label">Option 1</label>
+                                <input type="text" class="form-control" id="option1" name="option1" value="{{ question.option1 }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="option2" class="form-label">Option 2</label>
+                                <input type="text" class="form-control" id="option2" name="option2" value="{{ question.option2 }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="option3" class="form-label">Option 3</label>
+                                <input type="text" class="form-control" id="option3" name="option3" value="{{ question.option3 }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="option4" class="form-label">Option 4</label>
+                                <input type="text" class="form-control" id="option4" name="option4" value="{{ question.option4 }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="correct_option" class="form-label">Correct Option</label>
+                                <select class="form-select" id="correct_option" name="correct_option" required>
+                                    <option value="1" {% if question.correct_option == 1 %}selected{% endif %}>Option 1</option>
+                                    <option value="2" {% if question.correct_option == 2 %}selected{% endif %}>Option 2</option>
+                                    <option value="3" {% if question.correct_option == 3 %}selected{% endif %}>Option 3</option>
+                                    <option value="4" {% if question.correct_option == 4 %}selected{% endif %}>Option 4</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Question</button>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
