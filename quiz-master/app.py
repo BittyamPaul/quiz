@@ -644,7 +644,10 @@ def api_quizzes(chapter_id):
     return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Get port from environment variable or use 10000 as default
+    port = int(os.environ.get('PORT', 10000))
+    # Bind to 0.0.0.0 to make the app accessible outside the container
+    app.run(host='0.0.0.0', port=port)
 
 # Add WSGI handler for serverless deployment
 app.debug = False
